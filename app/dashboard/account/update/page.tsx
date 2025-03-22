@@ -6,23 +6,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { fetchUser, updateUser } from "@/utils/api";
 import { IconArrowLeft } from "@tabler/icons-react";
-import Loading from "../../loading";
-
-interface User {
-  id: string;
-  name: string;
-  firstname: string;
-  email: string;
-}
 
 export default function UpdateAccountPage() {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: "",
     firstname: "",
     email: "",
     password: "",
   });
-  const router = useRouter();
 
   useEffect(() => {
     const loadUser = async () => {
@@ -34,7 +26,7 @@ export default function UpdateAccountPage() {
           email: userData.email,
           password: "",
         });
-      } catch (error) {
+      } catch {
         toast.error("Failed to load user data");
         router.push("/dashboard");
       }
@@ -55,7 +47,6 @@ export default function UpdateAccountPage() {
       );
     }
   };
-
 
   return (
     <div className="container mx-auto py-10">

@@ -6,7 +6,7 @@ import { DataTableGroups } from "@/components/data-table-groups";
 import { Button } from "@/components/ui/button";
 import { IconPlus } from "@tabler/icons-react";
 import Loading from "./loading";
-import { fetchGroups, fetchUser, fetchUserGroups } from "@/utils/api";
+import { fetchUser, fetchUserGroups } from "@/utils/api";
 
 interface User {
   id: string;
