@@ -16,9 +16,9 @@ export default function HomePage() {
       try {
         await fetchUser();
         setIsLoggedIn(true);
+        setLoading(false);
       } catch (error) {
         setIsLoggedIn(false);
-      } finally {
         setLoading(false);
       }
     };
@@ -26,9 +26,10 @@ export default function HomePage() {
     checkAuthStatus();
   }, []);
 
-  if (loading) {
-    return <Loading />;
-  }
+
+    if (loading ) {
+      return <Loading />;
+    }
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-gray-50 to-gray-100">

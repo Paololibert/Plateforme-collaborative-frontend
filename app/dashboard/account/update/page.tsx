@@ -16,7 +16,6 @@ interface User {
 }
 
 export default function UpdateAccountPage() {
-  const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     name: "",
     firstname: "",
@@ -33,9 +32,8 @@ export default function UpdateAccountPage() {
           name: userData.name,
           firstname: userData.firstname,
           email: userData.email,
-          password: "", 
+          password: "",
         });
-        setLoading(false);
       } catch (error) {
         toast.error("Failed to load user data");
         router.push("/dashboard");
@@ -58,7 +56,6 @@ export default function UpdateAccountPage() {
     }
   };
 
-  if (loading) return <Loading />;
 
   return (
     <div className="container mx-auto py-10">

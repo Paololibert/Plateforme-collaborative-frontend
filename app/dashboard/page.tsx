@@ -8,10 +8,16 @@ import { IconPlus } from "@tabler/icons-react";
 import Loading from "./loading";
 import { fetchGroups, fetchUser, fetchUserGroups } from "@/utils/api";
 
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
 export default function Page() {
   const [loading, setLoading] = useState(true);
   const [groups, setGroups] = useState([]);
-  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -33,7 +39,7 @@ export default function Page() {
     loadUserAndGroups();
   }, [router]);
 
-  if (loading) {
+  if (loading || !currentUser) {
     return <Loading />;
   }
 
@@ -46,7 +52,7 @@ export default function Page() {
           Create New Group
         </Button>
       </div>
-      <DataTableGroups data={groups} currentUserId={currentUser?.id} />
+      <DataTableGroups data={groups} currentUserId={currentUser.id} />
     </div>
   );
 }

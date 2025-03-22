@@ -5,16 +5,25 @@ import { Button } from "@/components/ui/button";
 import { DataTableGroups } from "@/components/data-table-groups";
 import { toast } from "sonner";
 import Loading from "../loading";
-import { fetchUserGroups } from "@/utils/api";
+import { fetchUserGroups, fetchUser } from "@/utils/api";
+
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
 
 export default function GroupsPage() {
   const [loading, setLoading] = useState(true);
   const [groups, setGroups] = useState([]);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const router = useRouter();
 
   useEffect(() => {
-    const loadGroups = async () => {
+    const loadUserAndGroups = async () => {
       try {
+        const user = await fetchUser();
+        setCurrentUser(user);
         const data = await fetchUserGroups();
         setGroups(data);
         setLoading(false);
@@ -26,10 +35,10 @@ export default function GroupsPage() {
       }
     };
 
-    loadGroups();
+    loadUserAndGroups();
   }, []);
 
-  if (loading) {
+  if (loading || !currentUser) {
     return <Loading />;
   }
 
@@ -37,11 +46,14 @@ export default function GroupsPage() {
     <div className="flex flex-col gap-4">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">Groups</h1>
-        <Button variant="ghost" onClick={() => router.push("/dashboard/groups/create")}>
+        <Button
+          variant="ghost"
+          onClick={() => router.push("/dashboard/groups/create")}
+        >
           Create New Group
         </Button>
       </div>
-      <DataTableGroups data={groups} />
+      <DataTableGroups data={groups} currentUserId={currentUser.id} />
     </div>
   );
 }
