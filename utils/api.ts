@@ -111,3 +111,54 @@ export async function fetchSentInvitations(): Promise<Invitation[]> {
 
   return await response.json();
 }
+
+export async function updateUser(data: {
+  name?: string;
+  firstname?: string;
+  email?: string;
+  password?: string;
+}) {
+  const response = await fetch("/api/users/update", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error);
+  }
+
+  return await response.json();
+}
+
+export async function removeMember(groupId: string, memberId: string) {
+  const response = await fetch(`/api/groups/${groupId}/members/${memberId}`, {
+    method: "DELETE",
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error);
+  }
+
+  return await response.json();
+}
+
+export async function deleteGroup(groupId: string) {
+  const response = await fetch(`/api/groups/${groupId}`, {
+    method: "DELETE",
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error);
+  }
+
+  return await response.json();
+}

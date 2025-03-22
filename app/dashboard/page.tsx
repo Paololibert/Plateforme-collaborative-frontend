@@ -11,32 +11,26 @@ import { fetchGroups, fetchUser, fetchUserGroups } from "@/utils/api";
 export default function Page() {
   const [loading, setLoading] = useState(true);
   const [groups, setGroups] = useState([]);
+  const [currentUser, setCurrentUser] = useState<any>(null);
   const router = useRouter();
 
   useEffect(() => {
-    const checkAuth = async () => {
+    const loadUserAndGroups = async () => {
       try {
-        await fetchUser();
-        setLoading(false);
-      } catch (error) {
-        toast.error("You must be logged in to access the dashboard");
-        router.push("/login");
-      }
-    };
-
-    const loadGroups = async () => {
-      try {
+        const user = await fetchUser();
+        setCurrentUser(user);
         const data = await fetchUserGroups();
         setGroups(data);
+        setLoading(false);
       } catch (error) {
         toast.error(
           error instanceof Error ? error.message : "An unknown error occurred"
         );
+        setLoading(false);
       }
     };
 
-    checkAuth();
-    loadGroups();
+    loadUserAndGroups();
   }, [router]);
 
   if (loading) {
@@ -52,7 +46,7 @@ export default function Page() {
           Create New Group
         </Button>
       </div>
-      <DataTableGroups data={groups} />
+      <DataTableGroups data={groups} currentUserId={currentUser?.id} />
     </div>
   );
 }

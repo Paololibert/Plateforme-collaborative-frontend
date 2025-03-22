@@ -13,7 +13,8 @@ import {
 } from "@/components/ui/table";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { IconTrash } from "@tabler/icons-react"; // Ajouter cet import
+import { IconTrash } from "@tabler/icons-react"; // Import the trash icon
+import { removeMember } from "@/utils/api";
 
 interface User {
   id: string;
@@ -26,8 +27,8 @@ interface DataTableProps {
   data: User[];
   groupId: string;
   createdById: string;
-  createdBy: User; // Assurez-vous que c'est de type User complet
-  currentUserId: string; // Ajouter cette prop
+  createdBy: User; 
+  currentUserId: string; 
 }
 
 export function DataTableMembers({
@@ -35,30 +36,19 @@ export function DataTableMembers({
   groupId,
   createdById,
   createdBy,
-  currentUserId, // Ajouter ce paramètre
+  currentUserId, 
 }: DataTableProps) {
   const router = useRouter();
 
   // Combine creator and members data
   const allMembers = [
-    createdBy, // Ajouter le créateur en premier
-    ...data.filter((member) => member.id !== createdBy.id), // Filtrer le créateur s'il est aussi dans data
+    createdBy, 
+    ...data.filter((member) => member.id !== createdBy.id), // filter out the creator
   ];
 
   const handleRemoveMember = async (memberId: string) => {
     try {
-      const response = await fetch(
-        `/api/groups/${groupId}/members/${memberId}`,
-        {
-          method: "DELETE",
-          credentials: "include",
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to remove member");
-      }
-
+      await removeMember(groupId, memberId);
       toast.success("Member removed successfully");
       router.refresh();
     } catch (error) {
@@ -98,7 +88,7 @@ export function DataTableMembers({
       id: "actions",
       header: "Actions",
       cell: ({ row }: { row: User }) =>
-        // Modifier la condition pour n'afficher le bouton que si l'utilisateur connecté est l'admin
+        //update the condition to check if the current user is the creator and the member is not the creator
         currentUserId === createdById &&
         row.id !== createdById && (
           <Button

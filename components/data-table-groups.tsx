@@ -11,19 +11,38 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useRouter } from "next/navigation";
+import { IconTrash } from "@tabler/icons-react";
+import { deleteGroup } from "@/utils/api";
+import { toast } from "sonner";
 
 interface Group {
   id: string;
   name: string;
   description: string;
+  createdBy: {
+    id: string;
+  };
 }
 
 interface DataTableProps {
   data: Group[];
+  currentUserId: string;
 }
 
-export function DataTableGroups({ data }: DataTableProps) {
+export function DataTableGroups({ data, currentUserId }: DataTableProps) {
   const router = useRouter();
+
+  const handleDeleteGroup = async (groupId: string) => {
+    try {
+      await deleteGroup(groupId);
+      toast.success("Group deleted successfully");
+      router.refresh();
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Failed to delete group"
+      );
+    }
+  };
 
   const columns = [
     {
@@ -38,12 +57,24 @@ export function DataTableGroups({ data }: DataTableProps) {
       id: "actions",
       header: "Actions",
       cell: ({ row }: { row: Group }) => (
-        <Button
-          variant="outline"
-          onClick={() => router.push(`/dashboard/groups/${row.id}`)}
-        >
-          View Members
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            onClick={() => router.push(`/dashboard/groups/${row.id}`)}
+          >
+            View Members
+          </Button>
+          {row.createdBy.id === currentUserId && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => handleDeleteGroup(row.id)}
+              className="hover:text-red-500"
+            >
+              <IconTrash size={18} />
+            </Button>
+          )}
+        </div>
       ),
     },
   ];
