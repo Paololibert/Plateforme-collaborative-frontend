@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { fetchSentInvitations } from "@/utils/api";
 import Loading from "../../loading";
@@ -10,7 +9,6 @@ import { Invitation } from "@/types/invitation";
 export default function SentInvitationsPage() {
   const [loading, setLoading] = useState(true);
   const [invitations, setInvitations] = useState<Invitation[]>([]);
-  const router = useRouter();
 
   useEffect(() => {
     const loadInvitations = async () => {

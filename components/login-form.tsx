@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -19,9 +20,8 @@ export function LoginForm({
 }: React.ComponentProps<"div">) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,12 +41,12 @@ export function LoginForm({
         throw new Error(errorData.error);
       }
 
-      const data = await response.json();
-      toast.success(`Welcome, ${data.name}!`);
-      router.push("/dashboard"); 
+      const responseData = await response.json();
+      toast.success(`Welcome, ${responseData.name}!`);
+      router.push("/dashboard");
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "Une erreur est survenue"
+        error instanceof Error ? error.message : "An error occurred"
       );
     } finally {
       setIsLoading(false);
@@ -64,7 +64,6 @@ export function LoginForm({
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit}>
-            {error && <p className="text-red-500">{error}</p>}
             <div className="flex flex-col gap-6">
               <div className="grid gap-3">
                 <Label htmlFor="email">Email</Label>
@@ -99,9 +98,6 @@ export function LoginForm({
                 <Button type="submit" className="w-full" disabled={isLoading}>
                   {isLoading ? "Logging in..." : "Login"}
                 </Button>
-                {/* <Button variant="outline" className="w-full">
-                  Login with Google
-                </Button> */}
               </div>
             </div>
             <div className="mt-4 text-center text-sm">
