@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "https://plateforme-collaborative-backend-git-main-liberts-projects.vercel.app/api/:path*",
+        destination: "http://localhost:3001/api/:path*",
       },
     ];
   },
