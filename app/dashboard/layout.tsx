@@ -1,7 +1,7 @@
 "use client";
 import { ReactNode, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import {AppSidebar} from "@/components/app-sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import Loading from "./loading";
@@ -25,7 +25,9 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
 
         setLoading(false);
       } catch (error) {
-        toast.error("You must be logged in to access the dashboard");
+        toast.error(
+          error instanceof Error ? error.message : "An unknown error occurred"  
+        );
         router.push("/login");
       }
     };

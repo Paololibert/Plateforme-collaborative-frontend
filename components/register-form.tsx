@@ -1,5 +1,6 @@
+"use client";
+
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -18,13 +19,13 @@ export function RegisterForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const [name, setName] = useState("");
-  const [firstname, setFirstname] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    firstname: "",
+    email: "",
+    password: "",
+  });
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,7 +36,7 @@ export function RegisterForm({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name, firstname, email, password }),
+        body: JSON.stringify(formData),
       });
 
       if (!response.ok) {
@@ -64,7 +65,6 @@ export function RegisterForm({
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit}>
-            {error && <p className="text-red-500">{error}</p>}
             <div className="flex flex-col gap-6">
               <div className="grid gap-3">
                 <Label htmlFor="name">Name</Label>
@@ -72,8 +72,10 @@ export function RegisterForm({
                   id="name"
                   type="text"
                   placeholder="John"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  value={formData.name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
                   required
                 />
               </div>
@@ -83,8 +85,10 @@ export function RegisterForm({
                   id="firstname"
                   type="text"
                   placeholder="Doe"
-                  value={firstname}
-                  onChange={(e) => setFirstname(e.target.value)}
+                  value={formData.firstname}
+                  onChange={(e) =>
+                    setFormData({ ...formData, firstname: e.target.value })
+                  }
                   required
                 />
               </div>
@@ -94,8 +98,10 @@ export function RegisterForm({
                   id="email"
                   type="email"
                   placeholder="m@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
                   required
                 />
               </div>
@@ -104,8 +110,10 @@ export function RegisterForm({
                 <Input
                   id="password"
                   type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={formData.password}
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                  }
                   required
                 />
               </div>

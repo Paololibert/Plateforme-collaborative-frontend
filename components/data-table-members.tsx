@@ -27,8 +27,8 @@ interface DataTableProps {
   data: User[];
   groupId: string;
   createdById: string;
-  createdBy: User; 
-  currentUserId: string; 
+  createdBy: User;
+  currentUserId: string;
 }
 
 export function DataTableMembers({
@@ -36,13 +36,13 @@ export function DataTableMembers({
   groupId,
   createdById,
   createdBy,
-  currentUserId, 
+  currentUserId,
 }: DataTableProps) {
   const router = useRouter();
 
   // Combine creator and members data
   const allMembers = [
-    createdBy, 
+    createdBy,
     ...data.filter((member) => member.id !== createdBy.id), // filter out the creator
   ];
 
@@ -88,9 +88,8 @@ export function DataTableMembers({
       id: "actions",
       header: "Actions",
       cell: ({ row }: { row: User }) =>
-        //update the condition to check if the current user is the creator and the member is not the creator
-        currentUserId === createdById &&
-        row.id !== createdById && (
+        String(currentUserId) === String(createdById) &&
+        String(row.id) !== String(createdById) ? (
           <Button
             variant="ghost"
             size="icon"
@@ -99,7 +98,7 @@ export function DataTableMembers({
           >
             <IconTrash size={18} />
           </Button>
-        ),
+        ) : null,
     },
   ];
 

@@ -64,7 +64,7 @@ export function DataTableGroups({ data, currentUserId }: DataTableProps) {
           >
             View Members
           </Button>
-          {row.createdBy.id === currentUserId && (
+          {String(currentUserId) === String(row.createdBy.id) && (
             <Button
               variant="ghost"
               size="icon"
